@@ -11,6 +11,17 @@ use super::repository::update::pr::types::ChangeLogResult;
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct RenovateConfig {
     pub branch_prefix: Option<String>,
+    pub npmrc: Option<String>,
+    pub inherit_config: Option<bool>,
+    pub inherit_config_repo_name: Option<String>,
+    pub inherit_config_file_name: Option<String>,
+    pub inherit_config_strict: Option<bool>,
+    pub top_level_org: Option<String>,
+    pub parent_org: Option<String>,
+    pub secrets: Option<serde_json::Value>,
+    pub variables: Option<serde_json::Value>,
+    pub ignore_presets: Option<Vec<String>>,
+    pub config_file_names: Option<Vec<String>>,
     pub additional_branch_prefix: Option<String>,
     pub branch_name: Option<String>,
     pub commit_message: Option<String>,

@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::sync::atomic::{AtomicBool, Ordering};
 
 static UNICODE_EMOJI_MAP: &[(&str, &str)] = &[
     (":warning:", "\u{26a0}\u{fe0f}"),
@@ -61,12 +62,25 @@ static UNICODE_EMOJI_MAP: &[(&str, &str)] = &[
 /// Convert all known emoji shortcodes in a message body to Unicode.
 /// @parity lib/util/emoji.ts full
 pub fn emojify(text: &str) -> String {
+    if !use_unicode_emoji() {
+        return text.to_owned();
+    }
     let mut result = text.to_owned();
     let emoji_map: HashMap<&str, &str> = UNICODE_EMOJI_MAP.iter().copied().collect();
     for (code, unicode) in &emoji_map {
         result = result.replace(code, unicode);
     }
     result
+}
+
+static USE_UNICODE_EMOJI: AtomicBool = AtomicBool::new(true);
+
+pub fn set_emoji_config(unicode: bool) {
+    USE_UNICODE_EMOJI.store(unicode, Ordering::Relaxed);
+}
+
+fn use_unicode_emoji() -> bool {
+    USE_UNICODE_EMOJI.load(Ordering::Relaxed)
 }
 
 pub fn get_emoji(code: &str) -> Option<&'static str> {

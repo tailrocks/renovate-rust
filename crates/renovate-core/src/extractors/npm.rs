@@ -141,7 +141,6 @@ pub struct NpmLock {
     pub lockfile_version: Option<u64>,
 }
 
-#[cfg(test)]
 thread_local! {
     pub static TEST_NPM_LOCKS: std::cell::RefCell<std::collections::BTreeMap<String, NpmLock>> =
         const { std::cell::RefCell::new(std::collections::BTreeMap::new()) };
@@ -471,7 +470,11 @@ pub fn get_locked_versions(package_files: &mut [NpmPackageFile]) {
                     let ec = pf.extracted_constraints.get_or_insert_with(BTreeMap::new);
                     if lfv == 1 {
                         if let Some(existing) = ec.get("npm") {
-                            if existing.contains("^8") || existing.starts_with("^8") || existing.starts_with(">=8") || existing.starts_with(">=7") {
+                            if existing.contains("^8")
+                                || existing.starts_with("^8")
+                                || existing.starts_with(">=8")
+                                || existing.starts_with(">=7")
+                            {
                                 // skip for the "skips appending <7 to npm extractedConstraints" case (declared newer)
                             } else {
                                 // append <7 for e.g. >=6 + v1 lock
@@ -3329,7 +3332,6 @@ pub fn npm_update_dependency(file_content: &str, upgrade: &NpmUpdateUpgrade) -> 
     update_dependency_package_json(file_content, upgrade)
 }
 
-#[cfg(test)]
 mod tests {
     use super::*;
 

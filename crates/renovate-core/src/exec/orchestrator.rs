@@ -534,7 +534,10 @@ mod tests {
             ..Default::default()
         };
         let result = exec(&["exit 1".to_owned()], &opts, &config, &process_env).await;
-        assert!(result.is_err(), "ignore_failure=true does not swallow; still rejects on inner error");
+        assert!(
+            result.is_err(),
+            "ignore_failure=true does not swallow; still rejects on inner error"
+        );
     }
 
     // Ported: "wraps error if removeDockerContainer throws an error" — lib/util/exec/index.spec.ts line 1127

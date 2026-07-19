@@ -59,7 +59,10 @@ pub fn collect_pr_stats(pr_states: &[&str]) -> PrStats {
 
 /// Mirrors runRenovateRepoStats / runBranchSummary from lib/workers/repository/finalize/repository-statistics.ts .
 /// The collect_* are the core; full cache/platform/logger details pending in util/cache and platform.
-pub fn run_renovate_repo_stats(_config: &crate::workers::types::RenovateConfig, pr_list: &[(u64, String, String)]) {
+pub fn run_renovate_repo_stats(
+    _config: &crate::workers::types::RenovateConfig,
+    pr_list: &[(u64, String, String)],
+) {
     let _stats = collect_statistics(pr_list, "Configure Renovate");
     // tracing::debug!(stats = ?stats, "Renovate repository PR statistics"); (logger in TS)
 }

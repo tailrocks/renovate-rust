@@ -189,7 +189,6 @@ pub fn migrate_rule(mut rule: HostRule, legacy: &LegacyHostRule) -> Result<HostR
 /// @parity lib/util/host-rules.ts full
 // Public API
 // ---------------------------------------------------------------------------
-
 /// Add a host rule to the global registry.
 ///
 /// Mirrors `add()` from `lib/util/host-rules.ts`.

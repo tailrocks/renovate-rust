@@ -19,7 +19,6 @@ use self::migrations::compatibility_migration::CompatibilityMigration;
 use self::migrations::composer_ignore_platform_reqs_migration::ComposerIgnorePlatformReqsMigration;
 use self::migrations::custom_managers_migration::CustomManagersMigration;
 
-use crate::workers::types::RenovateConfig;
 use self::migrations::datasource_migration::DatasourceMigration;
 use self::migrations::dry_run_migration::DryRunMigration;
 use self::migrations::enabled_managers_migration::EnabledManagersMigration;
@@ -50,6 +49,7 @@ use self::migrations::schedule_migration::ScheduleMigration;
 use self::migrations::semantic_commits_migration::SemanticCommitsMigration;
 use self::migrations::semantic_prefix_migration::SemanticPrefixMigration;
 use self::migrations::unpublish_safe_migration::UnpublishSafeMigration;
+use crate::workers::types::RenovateConfig;
 
 pub trait Migration: Send + Sync {
     fn property_name(&self) -> &str;
@@ -271,7 +271,10 @@ pub enum ConfigMigrationResult {
 /// Manages the branchList and factory reset.
 ///
 /// @parity lib/workers/repository/config-migration/index.ts partial — configMigration orchestrator (the top-level glue: silent mode, get migrated data via factory, check branch, push to branchList, ensure PR, return result for dashboard; full check/ensure/PR creation in pending worker submodules, using the service here for the core migrate/is_migrated).
-pub fn config_migration(config: &RenovateConfig, branch_list: &mut Vec<String>) -> ConfigMigrationResult {
+pub fn config_migration(
+    config: &RenovateConfig,
+    branch_list: &mut Vec<String>,
+) -> ConfigMigrationResult {
     if config.mode.as_deref() == Some("silent") {
         // logger.debug equivalent; in Rust we can use tracing or ignore for now.
         return ConfigMigrationResult::NoMigration;
@@ -373,7 +376,7 @@ mod tests {
     use serde_json::Map;
     use serde_json::json;
 
-    use super::{config_migration, ConfigMigrationResult, MigrationService};
+    use super::{ConfigMigrationResult, MigrationService, config_migration};
     use crate::workers::types::RenovateConfig;
 
     fn map_from_value(value: serde_json::Value) -> Map<String, serde_json::Value> {
