@@ -1138,9 +1138,9 @@ pub fn get_pr_updates_table(pr_body_columns: Option<&[String]>, deps: &[PrTableD
     }
 
     // Build rows.
-    let mut rows: Vec<HashMap<&str, String>> = Vec::new();
+    let mut rows: Vec<std::collections::HashMap<&str, String>> = Vec::new();
     for dep in deps {
-        let mut row = HashMap::new();
+        let mut row = std::collections::HashMap::new();
         for col in columns {
             let val = match col.as_str() {
                 "Package" => {

@@ -450,10 +450,8 @@ pub fn get_locked_versions(package_files: &mut [NpmPackageFile]) {
             }
         } else if let Some(ref npm_lock_path) = pf.manager_data.npm_lock {
             lock_files.push(npm_lock_path.clone());
-            let lock = if cfg!(test) {
-                crate::extractors::npm::TEST_NPM_LOCKS
-                    .with(|m| m.borrow().get(npm_lock_path).cloned().unwrap_or_default())
-            } else {
+            let lock = {
+                // TEST_NPM_LOCKS elided for hygiene
                 if !lock_cache.contains_key(npm_lock_path) {
                     lock_cache.insert(npm_lock_path.clone(), NpmLock::default());
                 }
