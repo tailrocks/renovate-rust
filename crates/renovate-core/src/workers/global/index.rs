@@ -23,11 +23,11 @@ pub fn start_global_worker(
     global_config: &crate::config::GlobalConfig,
 ) -> GlobalWorkerResult {
     // Wire the ported globalInitialize from the TS global/index.ts flow (initialization, limits, etc. happen at this level before per-repo work).
-    let _init = crate::workers::global::initialize::global_initialize(global_config);
+    let _init = crate::workers::global::initialize::initialize_global(global_config);
 
     // Basic limit check example (isLimitReached from the TS index).
     // In full flow this gates processing; stub just records.
-    let _limit_reached = crate::workers::global::limits::is_commits_limit_reached();
+    let _limit_reached = crate::limits::is_commits_limit_reached();
 
     let dry_run = config.dry_run;
 
@@ -97,9 +97,7 @@ mod tests {
     #[test]
     fn start_global_worker_wires_global_initialize_and_limits() {
         // Ported: global/index.ts top level that calls globalInitialize + isLimitReached (and other subs) as part of the flow.
-        use crate::workers::global::limits::{
-            is_commits_limit_reached, reset_all_limits, set_max_limit,
-        };
+        use crate::limits::{reset_all_limits, set_max_limit};
 
         reset_all_limits();
         let mut global = crate::config::GlobalConfig::default();

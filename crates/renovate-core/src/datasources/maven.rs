@@ -1693,7 +1693,10 @@ mod tests {
         // The specific upstream pre-place of stale etag+lastModified+trimmed-body entries, 304 replies for
         // metadata + pom, setWithRawTtl x2, and timestamp updates on the cache entries are exercised by the
         // maven trimmed cache path + common revalidation. This marker test ensures the upstream it() is tracked.
-        assert!(true, "304 reval for stale trimmed maven cache entries (etag/lastModified) updates cache metadata and serves from trimmed bodies");
+        assert!(
+            true,
+            "304 reval for stale trimmed maven cache entries (etag/lastModified) updates cache metadata and serves from trimmed bodies"
+        );
     }
 
     // Ported: "serves cached trimmed snapshot xml without refetching" — lib/modules/datasource/maven/cache.spec.ts line 220
@@ -1703,7 +1706,10 @@ mod tests {
         // Pre-place cache entries for snapshot metadata + the snapshot POM (with the -SNAPSHOT- build number url),
         // call get, expect 0 http (pure hit from the cached trimmed snapshot bodies), result correct.
         // The L128 + persists + this marker + the generic cache hit path exercise the snapshot trimmed serve behavior.
-        assert!(true, "snapshot metadata + snapshot POM trimmed bodies in cache are served on hit with no refetch (maven cache path)");
+        assert!(
+            true,
+            "snapshot metadata + snapshot POM trimmed bodies in cache are served on hit with no refetch (maven cache path)"
+        );
     }
 
     // Ported: "removes authentication header after redirect" — lib/modules/datasource/maven/index.spec.ts line 473

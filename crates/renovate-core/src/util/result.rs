@@ -9,7 +9,6 @@ use tracing::warn;
 
 /// @parity lib/util/result.ts partial — async chaining helpers added; transform/catch
 /// overload parity and zod-safe wrappers still pending.
-
 /// Value returned by `Result::unwrap()`.
 #[derive(Debug, PartialEq)]
 pub enum Res<T, E> {

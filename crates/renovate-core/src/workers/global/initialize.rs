@@ -10,7 +10,8 @@ use serde::{Deserialize, Serialize};
 use crate::config::GlobalConfig;
 use crate::http::throttle::set_http_rate_limits;
 use crate::limits::set_max_limit;
-use crate::util::{emoji::set_emoji_config, host_rules};
+use crate::util::emoji::set_emoji_config;
+use crate::util::host_rules;
 
 use std::env;
 use std::fs;

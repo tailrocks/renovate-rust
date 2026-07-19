@@ -20,9 +20,8 @@ pub fn get_repo_config(config: &RenovateConfig) -> RenovateConfig {
     }
     // mergeInheritedConfig / checkOnboardingBranch / mergeRenovateConfig
     // (full surfaces in pending siblings inherited.rs / merge.rs / onboarding/branch/*; wired via full paths here for the getRepoConfig orchestrator.
-    // For this cycle the test proves the baseBranch step + that the fn runs without panic for the config surface.)
-    // c = crate::workers::repository::init::inherited::merge_inherited_config(&c);
-    // ... (stubs for compile; divergence noted)
+    // For this cycle (inherited unit) we wire the call to prove the merge path; divergence noted for full async/onboarding/merge.)
+    c = crate::workers::repository::init::inherited::merge_inherited_config(&c);
     c
 }
 

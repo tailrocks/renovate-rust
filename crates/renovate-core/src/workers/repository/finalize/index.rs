@@ -18,7 +18,7 @@ pub fn finalize_repository(config: &RenovateConfig, branch_list: &[String]) -> F
     // Other side effects (reconfigure, cache save, ensureIssuesClosing, clearRenovateRefs, PackageFiles.clear,
     // platform.getPrList for repoIsActivated, runBranchSummary) are pending in their units or platform layer;
     // stubbed here with comments for fidelity to TS finalizeRepo.
-// @parity lib/workers/repository/finalize/index.ts partial — finalizeRepo (wires pruneStaleBranches + runRenovateRepoStats + result; stubs for checkReconfigureBranch, repositoryCache, ensureIssuesClosing, clearRenovateRefs, PackageFiles.clear, platform.getPrList for repoIsActivated, runBranchSummary). Prune/stats are simplified (full in their pending .ts + platform); no direct it() for the glue found (sub specs cover called fns). Single test ported for stats call wiring.
+    // @parity lib/workers/repository/finalize/index.ts partial — finalizeRepo (wires pruneStaleBranches + runRenovateRepoStats + result; stubs for checkReconfigureBranch, repositoryCache, ensureIssuesClosing, clearRenovateRefs, PackageFiles.clear, platform.getPrList for repoIsActivated, runBranchSummary). Prune/stats are simplified (full in their pending .ts + platform); no direct it() for the glue found (sub specs cover called fns). Single test ported for stats call wiring.
     let prefix = config.branch_prefix.as_deref().unwrap_or("renovate/");
     // pruneStaleBranches(config, branchList) — the Rust prune is a simplified filter (full git/platform logic in pending prune.ts cycle).
     let prune_result = crate::workers::repository::finalize::prune::prune_stale_branches(
@@ -28,7 +28,10 @@ pub fn finalize_repository(config: &RenovateConfig, branch_list: &[String]) -> F
     );
 
     // runRenovateRepoStats(config, prList) — stub pr list (real from platform.getPrList pending); collect to mark stats.
-    let _stats = crate::workers::repository::finalize::repository_statistics::collect_statistics(&[], "Configure Renovate");
+    let _stats = crate::workers::repository::finalize::repository_statistics::collect_statistics(
+        &[],
+        "Configure Renovate",
+    );
 
     // TODO (pending): await checkReconfigureBranch, repositoryCache.saveCache(), ensureIssuesClosing(),
     // clearRenovateRefs(), PackageFiles.clear(), platform.getPrList() to set config.repoIsActivated if merged non-onboarding PRs,
