@@ -29,6 +29,7 @@ use tokio::sync::Semaphore;
 use tokio::task::JoinSet;
 
 use crate::http::{HttpClient, HttpError};
+use crate::util::host_rules::{find as find_host_rule, HostRuleSearch};
 use crate::versioning::npm::{NpmUpdateSummary, npm_update_summary};
 
 /// Default npm registry base URL.
@@ -411,10 +412,16 @@ pub async fn get_npm_releases(
         if matches!(status, 401..=404) {
             return Ok(None);
         }
-        // On the default registry, non-ignored errors abort the run
-        // (ExternalHostError equivalent). On custom registries they are
-        // swallowed and the package is skipped.
-        if is_default_registry(registry) {
+        // On the default registry (or when host rule sets abortOnError), non-ignored errors
+        // abort the run (ExternalHostError equivalent). On custom registries they are
+        // swallowed and the package is skipped unless host rule enables abortOnError.
+        let abort_on_error = find_host_rule(&HostRuleSearch {
+            url: Some(registry.to_owned()),
+            ..Default::default()
+        })
+        .abort_on_error
+        .unwrap_or_else(|| is_default_registry(registry));
+        if abort_on_error {
             return Err(NpmError::Http(HttpError::Status {
                 status: resp.status(),
                 url,
@@ -434,7 +441,13 @@ pub async fn get_npm_releases(
     let packument: FullPackument = match serde_json::from_str(&body) {
         Ok(p) => p,
         Err(e) => {
-            if is_default_registry(registry) {
+            let abort_on_error = find_host_rule(&HostRuleSearch {
+                url: Some(registry.to_owned()),
+                ..Default::default()
+            })
+            .abort_on_error
+            .unwrap_or_else(|| is_default_registry(registry));
+            if abort_on_error {
                 return Err(NpmError::Parse(e.to_string()));
             }
             return Ok(None);
